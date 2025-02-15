@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- Exam Results Title -->
+    <div class="hero text-center mb-5">
+        <h2 class="display-4 font-weight-bold">Exam Results: {{ attempt.exam.title }}</h2>
+        <p class="lead">Subject: <strong>{{ attempt.exam.subject }}</strong></p>
+        <p class="lead">Score: <strong>{{ attempt.score }}</strong> / <strong>{{ attempt.exam.questions.all|length }}</strong></p>
+    </div>
+
+    <!-- Answer Review -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="mb-3">Answer Review</h3>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Question</th>
+                        <th>Your Answer</th>
+                        <th>Correct Answer</th>
+                        <th>AI Score</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for answer in answers %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ answer.question.text }}</td>
+                            <td>{{ answer.student_response }}</td>
+                            <td>{{ answer.question.correct_answer }}</td>
+                            <td>{{ answer.obtained_marks }} / {{ answer.question.marks }}</td>
+                            <td>
+                                {% if answer.is_correct %}
+                                    <span class="text-success">✔ Correct</span>
+                                {% else %}
+                                    <span class="text-danger">❌ Incorrect</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- AI Feedback -->
+    <div class="card">
+        <div class="card-body">
+            <h3 class="mb-3">AI Feedback</h3>
+            <p>{{ feedback }}</p>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="mt-4 text-center">
+        <a href="{% url 'index' %}" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

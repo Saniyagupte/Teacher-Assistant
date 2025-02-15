@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <!-- Exam Title and Info -->
+    <div class="hero text-center mb-5">
+        <h2 class="display-4 font-weight-bold">{{ exam.title }}</h2>
+        <p class="lead">Subject: <strong>{{ exam.subject }}</strong></p>
+        <p class="lead">Topic: <strong>{{ exam.topic }}</strong></p>
+        <p class="lead">Type: <strong>{{ exam.type }}</strong></p>
+    </div>
+
+    <!-- Questions List -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="mb-3">Questions:</h3>
+            <ul class="list-group list-group-flush">
+                {% for question in questions %}
+                    <li class="list-group-item">
+                        <strong>Q{{ forloop.counter }}:</strong> {{ question.text }}
+                        <br>
+                        <small><b>Correct Answer:</b> {{ question.correct_answer }}</small>
+                        <br>
+                        <div class="mt-2">
+                            {% if question.question_type == "MCQ" %}
+                                <b>Options:</b>
+                                <ul>
+                                    {% for option in question.options %}
+                                        <li>{{ option }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+
+                        <!-- Edit Button (Only for Teachers) -->
+                        
+                            <a href="{% url 'edit_question' question.id %}" class="btn btn-warning btn-sm mt-2">✏️ Edit</a>
+                        
+
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+   
+   
+    
+    <div class="container mt-5">
+        <div class="card shadow p-4">
+            <h3 class="text-center mb-4">📚 Share Your Test</h3>
+    
+            <p class="text-center">Click below to open or share the test.</p>
+    
+            <!-- Test Link -->
+            <div class="text-center">
+                <a id="test-link" href="{% url 'take_exam' exam.id %}" class="btn btn-primary btn-lg" target="_blank">
+                    📝 Take Test
+                </a>
+            </div>
+    
+            <!-- Share Button -->
+            <div class="text-center mt-3">
+                <button id="share-btn" class="btn btn-success">📤 Share Test</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('share-btn').addEventListener('click', () => {
+            const testLink = document.getElementById('test-link').href;
+    
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Join the Test',
+                    text: 'Click the link below to take the test:',
+                    url: testLink
+                }).catch(error => console.error('Error sharing:', error));
+            } else {
+                alert('Sharing is not supported on this device.');
+            }
+        });
+    </script>   
+    
+    
+
+   <!-- Teacher will see/edit  exam/question paper -->
+   
+</div>  
+ {% endblock %}
+
+
+ 

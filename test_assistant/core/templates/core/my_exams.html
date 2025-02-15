@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="mb-4">My Exams</h2>
+        </div>
+    </div>
+    <div class="row">
+        {% if exams %}
+        {% for exam in exams %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ exam.title }}</h5>
+                    <p class="card-text">
+                        <small class="text-muted">Subject: {{ exam.subject }}</small><br>
+                        <small class="text-muted">Topic: {{ exam.topic }}</small><br>
+                        <small class="text-muted">Type: {{ exam.type }}</small>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Created: {{ exam.created_at }}</small>
+                        <div>
+                            <a href="{% url 'exam_detail' exam.id %}" class="btn btn-primary btn-sm">View Details</a>
+                            {% if exam.is_taken %}
+                                <a href="{% url 'exam_result' exam.id %}" class="btn btn-warning btn-sm">View Result</a>
+                            {% else %}
+                                <a href="{% url 'take_exam' exam.id %}" class="btn btn-outline-success btn-sm">Take Exam</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">No exams available.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
